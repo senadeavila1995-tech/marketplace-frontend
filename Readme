@@ -1,0 +1,182 @@
+# Marketplace Full Stack
+
+Marketplace desarrollado con **React + TypeScript + Vite** en el frontend y **ASP.NET Core Web API + Entity Framework Core + MySQL** en el backend.
+
+## Características
+
+### Autenticación y Seguridad
+
+* Registro de usuarios.
+* Inicio de sesión con JWT.
+* Gestión de sesiones mediante LocalStorage.
+* Protección de rutas.
+* Control de acceso basado en roles.
+
+### Roles del Sistema
+
+#### Administrador (ADMIN)
+
+* Gestión completa de productos.
+* Gestión de categorías.
+* Gestión de tiendas.
+* Gestión de usuarios.
+* Acceso al dashboard administrativo.
+
+#### Vendedor (SELLER)
+
+* Gestión de productos.
+* Administración de productos asociados a su tienda.
+
+#### Cliente (CUSTOMER)
+
+* Visualización de productos.
+* Gestión de carrito de compras.
+* Experiencia de compra en la tienda virtual.
+
+## Tecnologías Utilizadas
+
+### Frontend
+
+* React
+* TypeScript
+* Vite
+* React Router DOM
+* Axios
+* Bootstrap
+* SweetAlert2
+
+### Backend
+
+* ASP.NET Core Web API
+* Entity Framework Core
+* JWT Authentication
+* MySQL
+* Swagger
+
+## Arquitectura
+
+### Frontend
+
+```text
+src/
+├── api/
+├── components/
+├── layouts/
+├── pages/
+├── routes/
+├── services/
+├── types/
+└── utils/
+```
+
+### Backend
+
+```text
+Controllers/
+DTOs/
+Data/
+Models/
+Services/
+Program.cs
+appsettings.json
+```
+
+## Funcionalidades Implementadas
+
+* Autenticación JWT.
+* Registro de usuarios.
+* Inicio de sesión.
+* Gestión de roles.
+* Protección de rutas.
+* CRUD de productos.
+* CRUD de categorías.
+* CRUD de tiendas.
+* CRUD de usuarios.
+* Carrito de compras.
+* Dashboard administrativo.
+
+## Instalación
+
+### Backend
+
+Restaurar dependencias:
+
+```bash
+dotnet restore
+```
+
+Compilar:
+
+```bash
+dotnet build
+```
+
+Ejecutar:
+
+```bash
+dotnet run
+```
+
+Swagger estará disponible en:
+
+```text
+http://localhost:5108/swagger
+```
+
+### Frontend
+
+Instalar dependencias:
+
+```bash
+npm install
+```
+
+Ejecutar:
+
+```bash
+npm run dev
+```
+
+Aplicación disponible en:
+
+```text
+http://localhost:5173
+```
+
+## Base de Datos
+
+Motor utilizado:
+
+* MySQL
+
+Configurar la cadena de conexión en:
+
+```json
+appsettings.json
+```
+
+Ejemplo:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "server=localhost;database=marketplace;user=root;password=tu_password;"
+  }
+}
+```
+
+## Objetivos del Proyecto
+
+* Implementar una plataforma Marketplace escalable.
+* Gestionar múltiples tipos de usuarios.
+* Aplicar buenas prácticas de desarrollo Full Stack.
+* Implementar autenticación segura con JWT.
+* Facilitar la administración de productos y tiendas.
+
+## Autor
+
+Jesús Daniel De Ávila Niebles
+
+Desarrollador de Software | Full Stack Developer
+
+SENA - Análisis y Desarrollo de Software
