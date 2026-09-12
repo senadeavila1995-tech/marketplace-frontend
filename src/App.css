@@ -1,0 +1,181 @@
+#root {
+  min-height: 100vh;
+}
+
+.beauty-navbar {
+  min-height: 70px;
+  background:
+    linear-gradient(
+      90deg,
+      #fffafa 0%,
+      #ffffff 50%,
+      #fbf1f2 100%
+    );
+  border-bottom: 1px solid #eadfe0;
+  box-shadow: 0 3px 18px rgba(91, 61, 67, 0.06);
+}
+
+.beauty-brand {
+  color: #4b383b !important;
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
+}
+
+.beauty-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-right: 9px;
+  border-radius: 50%;
+  background: #f3dfe2;
+  color: #a85f6c;
+  font-size: 1rem;
+}
+
+.beauty-user {
+  color: #806f73;
+}
+
+.beauty-role {
+  color: #a85f6c;
+  font-weight: 700;
+}
+
+.beauty-cart {
+  border: 1px solid #d9b5bb !important;
+  border-radius: 50px !important;
+  color: #a85f6c !important;
+  background: white !important;
+  font-weight: 700;
+}
+
+.beauty-cart:hover {
+  background: #f6e6e8 !important;
+}
+
+.beauty-logout {
+  border-radius: 50px !important;
+  border-color: #c9b7ba !important;
+  color: #6f5d62 !important;
+}
+
+.beauty-logout:hover {
+  background: #f3e9e4 !important;
+  border-color: #d9c4c7 !important;
+  color: #4b383b !important;
+}
+
+.beauty-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 2.4rem;
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(201, 135, 145, 0.2),
+      transparent 25%
+    ),
+    linear-gradient(
+      135deg,
+      #fffefe,
+      #f8e9eb
+    );
+  border: 1px solid #eadfe0;
+  box-shadow: 0 12px 35px rgba(91, 61, 67, 0.07);
+}
+
+.beauty-hero::after {
+  content: "";
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  right: -70px;
+  bottom: -80px;
+  border-radius: 50%;
+  background: rgba(185, 154, 99, 0.12);
+}
+
+.beauty-eyebrow {
+  color: #a85f6c;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.beauty-hero-title {
+  max-width: 650px;
+  color: #4b383b;
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.beauty-hero-text {
+  max-width: 650px;
+  color: #806f73;
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.beauty-section-title {
+  color: #4b383b;
+  font-weight: 800;
+}
+
+.beauty-section-subtitle {
+  color: #806f73;
+}
+
+.beauty-category-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #e5d1d4;
+  border-radius: 50px;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  color: #6f5d62;
+  font-size: 0.88rem;
+  font-weight: 700;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.beauty-category-pill:hover {
+  background: #f6e6e8;
+  color: #a85f6c;
+  transform: translateY(-1px);
+}
+
+.beauty-stock {
+  color: #806f73;
+  font-size: 0.78rem;
+}
+
+.beauty-store {
+  color: #806f73;
+  font-size: 0.82rem;
+}
+
+.beauty-catalog {
+  padding-bottom: 2rem;
+}
+
+.beauty-loading {
+  color: #806f73;
+}
+
+.beauty-empty {
+  border-radius: 20px;
+  border: 1px dashed #d9c4c7;
+  padding: 3rem 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  color: #806f73;
+}
