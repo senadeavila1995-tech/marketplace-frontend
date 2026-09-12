@@ -26,23 +26,23 @@ export default function Sidebar() {
               ✨ Dashboard
             </NavLink>
 
-            <NavLink to="/products" className={linkClass}>
+            <NavLink to="/admin/products" className={linkClass}>
               🧴 Productos
             </NavLink>
 
-            <NavLink to="/categories" className={linkClass}>
+            <NavLink to="/admin/categories" className={linkClass}>
               🌸 Categorías
             </NavLink>
 
-            <NavLink to="/stores" className={linkClass}>
+            <NavLink to="/admin/stores" className={linkClass}>
               🏪 Tiendas
             </NavLink>
 
-            <NavLink to="/users" className={linkClass}>
+            <NavLink to="/admin/users" className={linkClass}>
               👤 Usuarios
             </NavLink>
 
-            <NavLink to="/payments" className={linkClass}>
+            <NavLink to="/admin/payments" className={linkClass}>
               💳 Pagos / Escrow
             </NavLink>
           </>
@@ -54,11 +54,11 @@ export default function Sidebar() {
               ✨ Dashboard
             </NavLink>
 
-            <NavLink to="/products" className={linkClass}>
+            <NavLink to="/seller/products" className={linkClass}>
               🧴 Mis productos
             </NavLink>
 
-            <NavLink to="/stores" className={linkClass}>
+            <NavLink to="/seller/stores" className={linkClass}>
               🏪 Mi tienda
             </NavLink>
           </>
