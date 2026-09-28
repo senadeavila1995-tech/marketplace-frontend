@@ -18,6 +18,7 @@ import PaymentsPage from "../pages/dashboard/PaymentsPage";
 
 import CustomerProductsPage from "../pages/dashboard/CustomerProductsPage";
 import CartPage from "../pages/dashboard/CartPage";
+import MyOrdersPage from "../pages/dashboard/MyOrdersPage";
 
 import AdminLayout from "../layouts/AdminLayout";
 import SellerLayout from "../layouts/SellerLayout";
@@ -109,6 +110,7 @@ export default function AppRoutes() {
         <Route element={<CustomerLayout />}>
           <Route path="/shop" element={<CustomerProductsPage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/my-orders" element={<MyOrdersPage />} />
         </Route>
 
         <Route

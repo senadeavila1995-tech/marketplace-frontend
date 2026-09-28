@@ -10,6 +10,7 @@ export default function CustomerProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("Todas");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
   async function load() {
@@ -213,7 +214,18 @@ export default function CustomerProductsPage() {
                 key={product.id}
               >
 
-                <div className="card product-card h-100">
+                <div
+                  className="card product-card h-100"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setSelectedProduct(product)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      setSelectedProduct(product);
+                    }
+                  }}
+                >
 
                   {product.imageUrl ? (
 
@@ -288,7 +300,10 @@ export default function CustomerProductsPage() {
                         !product.status ||
                         product.stock <= 0
                       }
-                      onClick={() => add(product)}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        add(product);
+                      }}
                     >
                       Agregar al carrito
                     </button>
@@ -306,6 +321,130 @@ export default function CustomerProductsPage() {
         )}
 
       </section>
+
+      {selectedProduct && (
+        <div
+          className="modal fade show d-block"
+          tabIndex={-1}
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setSelectedProduct(null)}
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.55)",
+            zIndex: 1050,
+          }}
+        >
+          <div
+            className="modal-dialog modal-dialog-centered modal-lg"
+            role="document"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="modal-content border-0 shadow-lg overflow-hidden">
+
+              <div className="modal-header border-0">
+                <div>
+                  <div className="product-category mb-1">
+                    {selectedProduct.category || "Sin categoría"}
+                  </div>
+
+                  <h2 className="modal-title h4 mb-0">
+                    {selectedProduct.name}
+                  </h2>
+                </div>
+
+                <button
+                  type="button"
+                  className="btn-close"
+                  aria-label="Cerrar"
+                  onClick={() => setSelectedProduct(null)}
+                />
+              </div>
+
+              <div className="modal-body p-4">
+
+                <div className="row g-4 align-items-center">
+
+                  <div className="col-md-6">
+
+                    {selectedProduct.imageUrl ? (
+                      <img
+                        src={selectedProduct.imageUrl}
+                        alt={selectedProduct.name}
+                        className="img-fluid rounded w-100"
+                        style={{
+                          maxHeight: "420px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <div
+                        className="d-flex align-items-center justify-content-center rounded"
+                        style={{
+                          minHeight: "320px",
+                          background: "#f8f3f4",
+                        }}
+                      >
+                        <div className="text-center text-muted">
+                          <div className="fs-1 mb-2">✦</div>
+                          <div>Imagen próximamente</div>
+                        </div>
+                      </div>
+                    )}
+
+                  </div>
+
+                  <div className="col-md-6">
+
+                    <div className="beauty-store mb-2">
+                      {selectedProduct.store || "Tienda"}
+                    </div>
+
+                    <div className="product-price fs-3 mb-3">
+                      ${selectedProduct.price.toLocaleString("es-CO")}
+                    </div>
+
+                    <p className="text-muted mb-4">
+                      {selectedProduct.description ||
+                        "Producto seleccionado para tu rutina de cuidado personal."}
+                    </p>
+
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+
+                      <span className="beauty-stock">
+                        {selectedProduct.stock > 0
+                          ? `${selectedProduct.stock} disponibles`
+                          : "Sin stock"}
+                      </span>
+
+                      <span className="beauty-badge">
+                        {selectedProduct.status && selectedProduct.stock > 0
+                          ? "Disponible"
+                          : "Agotado"}
+                      </span>
+
+                    </div>
+
+                    <button
+                      className="btn beauty-btn w-100"
+                      disabled={
+                        !selectedProduct.status ||
+                        selectedProduct.stock <= 0
+                      }
+                      onClick={() => add(selectedProduct)}
+                    >
+                      Agregar al carrito
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

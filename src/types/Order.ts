@@ -24,7 +24,9 @@ export interface CheckoutResponse {
 export type OrderStatus =
   | "PENDING"
   | "PAID"
-  | "SHIPPED";
+  | "PARTIALLY_SHIPPED"
+  | "SHIPPED"
+  | "DELIVERED";
 
 export interface SellerOrderItem {
   productId: number;
@@ -39,6 +41,8 @@ export interface SellerOrder {
   status: OrderStatus;
   createdAt: string;
   total: number;
+  totalItems?: number;
+  shippedItems?: number;
   paymentMethod?: PaymentMethod;
   items: SellerOrderItem[];
 }

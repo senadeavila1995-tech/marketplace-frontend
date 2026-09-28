@@ -16,6 +16,7 @@ export interface Payment {
   releaseDate?: string | null;
   adminConfirmed: boolean;
   escrowStatus: EscrowStatus;
+  orderStatus?: string;
 }
 
 export interface ConfirmPaymentResponse {

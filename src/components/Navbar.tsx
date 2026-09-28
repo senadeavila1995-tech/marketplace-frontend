@@ -36,12 +36,21 @@ export default function Navbar() {
           )}
 
           {user?.role === "CUSTOMER" && (
-            <Link
-              to="/cart"
-              className="btn btn-sm beauty-cart px-3"
-            >
-              🛍️ Carrito
-            </Link>
+            <>
+              <Link
+                to="/my-orders"
+                className="btn btn-sm btn-outline-primary px-3"
+              >
+                📦 Mis pedidos
+              </Link>
+
+              <Link
+                to="/cart"
+                className="btn btn-sm beauty-cart px-3"
+              >
+                🛍️ Carrito
+              </Link>
+            </>
           )}
 
           <button

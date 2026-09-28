@@ -14,7 +14,14 @@ export default function PaymentsPage() {
   async function load() {
     try {
       setLoading(true);
-      setPayments(await getPayments());
+
+      const data = await getPayments();
+
+      setPayments(
+        data.filter(
+          (payment) => payment.orderStatus !== "DELIVERED"
+        )
+      );
     } catch (error: any) {
       await Swal.fire({
         icon: "error",

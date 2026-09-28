@@ -31,3 +31,20 @@ export async function shipOrder(id: number) {
 
   return response.data;
 }
+
+export async function getMyOrders(): Promise<SellerOrder[]> {
+  const response = await API.get<SellerOrder[]>(
+    "/orders/my-orders"
+  );
+
+  return response.data;
+}
+
+
+export async function receiveOrder(id: number) {
+  const response = await API.post(
+    `/orders/${id}/received`
+  );
+
+  return response.data;
+}
