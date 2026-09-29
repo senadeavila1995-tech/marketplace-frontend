@@ -329,7 +329,7 @@ export default function CustomerProductsPage() {
         >
           {promotion && (
             <div
-              className="position-absolute top-0 start-0 m-3 px-3 py-1 rounded-pill fw-semibold small"
+              className="position-absolute top-0 start-0 m-3 px-3 py-1 rounded-pill fw-semibold small beauty-promo-badge"
               style={{
                 background: "#9f6570",
                 color: "#ffffff",
@@ -499,7 +499,7 @@ export default function CustomerProductsPage() {
           necesidades.
         </div>
 
-        <div className="d-flex flex-wrap gap-2 justify-content-center">
+        <div className="beauty-category-list d-flex flex-wrap gap-2 justify-content-center">
           <button
             type="button"
             className={`beauty-category-pill border-0 ${
@@ -558,7 +558,7 @@ export default function CustomerProductsPage() {
 
             <div className="col-12 col-lg-auto">
               <div
-                className="position-relative"
+                className="beauty-search-box position-relative"
                 style={{
                   width: "100%",
                   maxWidth: "360px",
@@ -566,7 +566,7 @@ export default function CustomerProductsPage() {
                 }}
               >
                 <span
-                  className="position-absolute top-50 translate-middle-y text-muted"
+                  className="beauty-search-icon position-absolute top-50 translate-middle-y text-muted"
                   style={{
                     left: "16px",
                     pointerEvents: "none",
@@ -578,7 +578,7 @@ export default function CustomerProductsPage() {
 
                 <input
                   type="search"
-                  className="form-control rounded-pill ps-5 pe-4"
+                  className="form-control beauty-search-input rounded-pill ps-5 pe-4"
                   placeholder="Buscar productos..."
                   value={searchTerm}
                   onChange={(event) =>
@@ -595,7 +595,7 @@ export default function CustomerProductsPage() {
                 />
 
                 {!loading && (
-                  <div className="text-end small text-muted mt-2">
+                  <div className="beauty-search-meta text-end small mt-2">
                     {visibleProductCount}{" "}
                     {visibleProductCount === 1
                       ? "producto"
