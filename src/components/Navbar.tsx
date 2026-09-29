@@ -17,10 +17,8 @@ export default function Navbar() {
       <div className="container-fluid">
 
         <Link className="navbar-brand beauty-brand fw-bold" to={home}>
-          <span className="beauty-brand-mark">
-            ✦
-          </span>
-          Beauty Market
+          <span className="beauty-brand-mark">✦</span>
+          <span className="beauty-brand-text">Beauty Market</span>
         </Link>
 
         <div className="d-flex align-items-center gap-2 gap-md-3">
@@ -39,14 +37,14 @@ export default function Navbar() {
             <>
               <Link
                 to="/my-orders"
-                className="btn btn-sm btn-outline-primary px-3"
+                className="btn btn-sm btn-outline-primary px-3 navbar-desktop-action"
               >
                 📦 Mis pedidos
               </Link>
 
               <Link
                 to="/cart"
-                className="btn btn-sm beauty-cart px-3"
+                className="btn btn-sm beauty-cart px-3 navbar-desktop-action"
               >
                 🛍️ Carrito
               </Link>
@@ -57,8 +55,11 @@ export default function Navbar() {
             type="button"
             className="btn btn-sm beauty-logout"
             onClick={logout}
+            aria-label="Cerrar sesión"
+            title="Cerrar sesión"
           >
-            Salir
+            <span className="navbar-logout-text">Salir</span>
+            <span className="navbar-logout-icon">↪</span>
           </button>
 
         </div>

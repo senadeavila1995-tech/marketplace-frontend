@@ -418,3 +418,498 @@
     transform: translateY(-3px);
   }
 }
+/* MOBILE APP NAVIGATION */
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .customer-app-shell {
+    min-height: 100vh;
+    padding-bottom: 78px;
+  }
+
+  .customer-app-content {
+    padding: 0.75rem !important;
+  }
+
+  .mobile-bottom-nav {
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    height: 70px;
+    padding: 6px 8px;
+    background: rgba(10, 10, 18, 0.96);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.22);
+  }
+
+  .mobile-bottom-nav-link {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3px;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.62);
+    text-decoration: none;
+    font-size: 0.68rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .mobile-bottom-nav-link.active {
+    color: #fff;
+  }
+
+  .mobile-bottom-nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 30px;
+    border-radius: 12px;
+    font-size: 1.15rem;
+  }
+
+  .mobile-bottom-nav-link.active .mobile-bottom-nav-icon {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+@media (max-width: 380px) {
+  .mobile-bottom-nav-link {
+    font-size: 0.62rem;
+  }
+
+  .mobile-bottom-nav-icon {
+    width: 30px;
+    height: 28px;
+    font-size: 1rem;
+  }
+}
+
+/* =========================================================
+   MOBILE APP NAVBAR
+   ========================================================= */
+
+.navbar-logout-icon {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .beauty-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1040;
+    min-height: 58px;
+    padding: 0.55rem 0.75rem !important;
+  }
+
+  .beauty-navbar .container-fluid {
+    padding: 0;
+  }
+
+  .beauty-brand {
+    min-width: 0;
+    font-size: 1rem !important;
+    white-space: nowrap;
+  }
+
+  .beauty-brand-mark {
+    margin-right: 0.25rem;
+  }
+
+  .navbar-desktop-action {
+    display: none !important;
+  }
+
+  .beauty-logout {
+    width: 38px;
+    height: 38px;
+    padding: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+  }
+
+  .navbar-logout-text {
+    display: none;
+  }
+
+  .navbar-logout-icon {
+    display: inline;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .beauty-brand-text {
+    font-size: 0.92rem;
+  }
+
+  .beauty-navbar {
+    min-height: 54px;
+  }
+}
+
+/* =========================================================
+   SHOP - MOBILE APP EXPERIENCE
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .beauty-catalog {
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+  }
+
+  /* Hero compacto */
+  .beauty-hero {
+    padding: 1.15rem !important;
+    margin-bottom: 1.15rem !important;
+    border-radius: 20px;
+  }
+
+  .beauty-hero-title {
+    font-size: clamp(1.65rem, 8vw, 2.15rem);
+    line-height: 1.08;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .beauty-hero-text {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .beauty-hero button {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  /* Categorías tipo chips */
+  .beauty-category-list {
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 2px 9px;
+    margin-right: -2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .beauty-category-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .beauty-category-pill {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    min-height: 40px;
+    padding: 0.55rem 0.9rem !important;
+  }
+
+  /* Encabezado del catálogo */
+  .beauty-section-title {
+    line-height: 1.2;
+  }
+
+  .beauty-section-subtitle {
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+
+  /* Buscador */
+  .beauty-search-box {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+  }
+
+  .beauty-search-input {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .beauty-search-meta {
+    padding-right: 0.25rem;
+  }
+
+  /* =====================================================
+     PRODUCT GRID
+     ===================================================== */
+
+  .beauty-catalog .row.g-4 {
+    --bs-gutter-x: 0.7rem;
+    --bs-gutter-y: 0.7rem;
+  }
+
+  .beauty-catalog .row.g-4 > .col-sm-6 {
+    width: 50%;
+  }
+
+  .beauty-catalog .product-card {
+    border-radius: 17px;
+    overflow: hidden;
+  }
+
+  .beauty-catalog .product-image {
+    height: 145px;
+    min-height: 145px;
+  }
+
+  .beauty-catalog .product-card .card-body {
+    padding: 0.75rem !important;
+  }
+
+  .beauty-catalog .product-category {
+    font-size: 0.65rem;
+    margin-bottom: 0.35rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .beauty-catalog .product-title {
+    font-size: 0.9rem;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .beauty-catalog .product-description {
+    font-size: 0.72rem !important;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0.55rem !important;
+  }
+
+  .beauty-catalog .beauty-store {
+    font-size: 0.68rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .beauty-catalog .product-price {
+    font-size: 1.05rem !important;
+    margin-bottom: 0.55rem !important;
+  }
+
+  .beauty-catalog .beauty-stock {
+    font-size: 0.65rem;
+  }
+
+  .beauty-catalog .beauty-badge {
+    font-size: 0.58rem;
+    padding: 0.25rem 0.4rem;
+  }
+
+  .beauty-catalog .beauty-btn {
+    min-height: 42px;
+    padding: 0.5rem 0.35rem;
+    font-size: 0.72rem;
+    border-radius: 12px;
+  }
+
+  /* Badge de promoción */
+  .beauty-catalog .beauty-promo-badge {
+    margin: 0.45rem !important;
+    padding: 0.28rem 0.45rem !important;
+    font-size: 0.55rem !important;
+    line-height: 1.1;
+  }
+
+  /* =====================================================
+     PRODUCT MODAL -> MOBILE SHEET
+     ===================================================== */
+
+  .beauty-catalog .modal {
+    padding: 0 !important;
+  }
+
+  .beauty-catalog .modal-dialog {
+    margin: 0;
+    width: 100%;
+    max-width: none;
+    min-height: 100%;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .beauty-catalog .modal-content {
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: 24px 24px 0 0 !important;
+  }
+
+  .beauty-catalog .modal-header {
+    padding: 1rem 1rem 0.75rem;
+  }
+
+  .beauty-catalog .modal-body {
+    padding: 0.75rem 1rem 1.25rem !important;
+  }
+
+  .beauty-catalog .modal-body .row {
+    --bs-gutter-y: 1rem;
+  }
+
+  .beauty-catalog .modal-body img {
+    max-height: 250px !important;
+  }
+
+  .beauty-catalog .modal-body .product-price {
+    font-size: 1.5rem !important;
+  }
+
+  .beauty-catalog .modal-body .beauty-btn {
+    min-height: 48px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 380px) {
+
+  .beauty-catalog .product-image {
+    height: 125px;
+    min-height: 125px;
+  }
+
+  .beauty-catalog .product-card .card-body {
+    padding: 0.65rem !important;
+  }
+
+  .beauty-catalog .product-title {
+    font-size: 0.84rem;
+  }
+
+  .beauty-catalog .beauty-btn {
+    font-size: 0.67rem;
+  }
+}
+
+
+/* =========================================================
+   MOBILE SHOP - PRODUCT CARD POLISH
+   ========================================================= */
+
+.mobile-bottom-nav-svg {
+  width: 21px;
+  height: 21px;
+}
+
+@media (max-width: 575.98px) {
+  .mobile-bottom-nav {
+    height: 72px;
+    padding: 6px 7px;
+    gap: 2px;
+  }
+
+  .mobile-bottom-nav-link {
+    position: relative;
+    border-radius: 14px;
+    transition:
+      color 0.18s ease,
+      background 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .mobile-bottom-nav-link:active {
+    transform: scale(0.94);
+  }
+
+  .mobile-bottom-nav-link.active {
+    background: rgba(255, 255, 255, 0.055);
+  }
+
+  .mobile-bottom-nav-link.active::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    width: 22px;
+    height: 3px;
+    border-radius: 99px;
+    background: currentColor;
+  }
+
+  .mobile-bottom-nav-icon {
+    width: 36px;
+    height: 31px;
+  }
+
+  .mobile-bottom-nav-svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .beauty-catalog .product-card {
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.07),
+      0 1px 2px rgba(0, 0, 0, 0.04);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+
+  .beauty-catalog .product-card:active {
+    transform: scale(0.985);
+  }
+
+  .beauty-catalog .product-image {
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(0, 0, 0, 0.04)
+    );
+  }
+
+  .beauty-catalog .product-price {
+    letter-spacing: -0.02em;
+  }
+
+  .beauty-catalog .beauty-btn {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .beauty-catalog .product-title {
+    min-height: 2.25em;
+  }
+}
+
+@media (max-width: 380px) {
+  .mobile-bottom-nav {
+    height: 68px;
+  }
+
+  .mobile-bottom-nav-link {
+    font-size: 0.6rem;
+  }
+
+  .mobile-bottom-nav-icon {
+    height: 28px;
+  }
+
+  .mobile-bottom-nav-svg {
+    width: 18px;
+    height: 18px;
+  }
+}

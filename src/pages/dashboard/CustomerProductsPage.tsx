@@ -434,7 +434,7 @@ export default function CustomerProductsPage() {
   }
 
   return (
-    <div className="container-fluid beauty-catalog">
+    <div id="catalogo" className="container-fluid beauty-catalog">
       <section className="beauty-hero mb-4 mb-lg-5">
         <div
           className="position-relative d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-4"
