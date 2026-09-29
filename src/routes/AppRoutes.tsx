@@ -15,6 +15,7 @@ import CategoriesPage from "../pages/dashboard/CategoriesPage";
 import StoresPage from "../pages/dashboard/StoresPage";
 import UsersPage from "../pages/dashboard/UsersPage";
 import PaymentsPage from "../pages/dashboard/PaymentsPage";
+import PromotionsPage from "../pages/dashboard/PromotionsPage";
 
 import CustomerProductsPage from "../pages/dashboard/CustomerProductsPage";
 import CartPage from "../pages/dashboard/CartPage";
@@ -47,6 +48,7 @@ export default function AppRoutes() {
           <Route path="stores" element={<StoresPage />} />
           <Route path="users" element={<UsersPage />} />
           <Route path="payments" element={<PaymentsPage />} />
+          <Route path="promotions" element={<PromotionsPage />} />
         </Route>
 
         <Route

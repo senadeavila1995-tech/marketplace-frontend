@@ -9,17 +9,17 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar p-3">
-
       <div className="sidebar-title mb-3">
         ✦ Beauty Market
       </div>
 
       <div className="small text-muted mb-3">
-        Panel de gestión
+        {role === "ADMIN"
+          ? "Panel administrativo"
+          : "Panel del vendedor"}
       </div>
 
       <nav className="nav flex-column">
-
         {role === "ADMIN" && (
           <>
             <NavLink to="/admin" className={linkClass}>
@@ -45,13 +45,17 @@ export default function Sidebar() {
             <NavLink to="/admin/payments" className={linkClass}>
               💳 Pagos / Escrow
             </NavLink>
+
+            <NavLink to="/admin/promotions" className={linkClass}>
+              📢 Promociones
+            </NavLink>
           </>
         )}
 
         {role === "SELLER" && (
           <>
             <NavLink to="/seller" className={linkClass}>
-              ✨ Dashboard
+              📦 Pedidos y ventas
             </NavLink>
 
             <NavLink to="/seller/products" className={linkClass}>
@@ -63,7 +67,6 @@ export default function Sidebar() {
             </NavLink>
           </>
         )}
-
       </nav>
     </aside>
   );

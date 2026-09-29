@@ -16,7 +16,17 @@ export default function ProtectedRoute({
   const role = session.getRole();
 
   if (!token || !role) {
-    return <Navigate to="/login" replace />;
+    const returnTo =
+      window.location.pathname +
+      window.location.search +
+      window.location.hash;
+
+    return (
+      <Navigate
+        to={`/login?returnTo=${encodeURIComponent(returnTo)}`}
+        replace
+      />
+    );
   }
 
   if (roles && !roles.includes(role)) {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 import {
   getSellerOrders,
@@ -12,6 +12,60 @@ import type {
   SellerOrder,
 } from "../../types/Order";
 
+function getPaymentLabel(method?: PaymentMethod) {
+  switch (method) {
+    case "CASH_ON_DELIVERY":
+      return "Contra entrega";
+    case "NEQUI":
+      return "Nequi";
+    case "PAYPAL":
+      return "PayPal";
+    default:
+      return "No especificado";
+  }
+}
+
+function getStatusLabel(status: SellerOrder["status"]) {
+  switch (status) {
+    case "PENDING":
+      return "Pendiente";
+    case "PAID":
+      return "Pago confirmado";
+    case "PARTIALLY_SHIPPED":
+      return "Envío parcial";
+    case "SHIPPED":
+      return "Enviado";
+    case "DELIVERED":
+      return "Recibido";
+    default:
+      return status;
+  }
+}
+
+function getStatusClass(status: SellerOrder["status"]) {
+  switch (status) {
+    case "PENDING":
+      return "bg-warning text-dark";
+    case "PAID":
+      return "bg-primary";
+    case "PARTIALLY_SHIPPED":
+      return "bg-info text-dark";
+    case "SHIPPED":
+      return "bg-success";
+    case "DELIVERED":
+      return "bg-success";
+    default:
+      return "bg-secondary";
+  }
+}
+
+function getOrderUnits(order: SellerOrder) {
+  return order.items.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+}
+
 export default function SellerDashboard() {
   const [products, setProducts] = useState(0);
   const [stores, setStores] = useState(0);
@@ -21,7 +75,7 @@ export default function SellerDashboard() {
 
   const user = session.getUser();
 
-  async function loadOrders() {
+  const loadOrders = useCallback(async (showError = true) => {
     try {
       setLoadingOrders(true);
 
@@ -29,20 +83,24 @@ export default function SellerDashboard() {
 
       setOrders(orderList);
     } catch (error: any) {
-      await Swal.fire({
-        icon: "error",
-        title: "No se pudieron cargar las ventas",
-        text:
-          error?.response?.data ||
-          "No fue posible consultar los pedidos del vendedor.",
-      });
+      console.error("Error cargando ventas:", error);
+
+      if (showError) {
+        await Swal.fire({
+          icon: "error",
+          title: "No se pudieron cargar las ventas",
+          text:
+            error?.response?.data ||
+            "No fue posible consultar los pedidos del vendedor.",
+        });
+      }
     } finally {
       setLoadingOrders(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
-    async function load() {
+    async function loadCatalog() {
       try {
         const [productList, storeList] = await Promise.all([
           getProducts(),
@@ -51,14 +109,22 @@ export default function SellerDashboard() {
 
         setProducts(productList.length);
         setStores(storeList.length);
-      } catch {
-        // Estado parcial permitido.
+      } catch (error) {
+        console.error("Error cargando datos del vendedor:", error);
       }
     }
 
-    load();
+    loadCatalog();
     loadOrders();
-  }, []);
+
+    const interval = window.setInterval(() => {
+      loadOrders(false);
+    }, 5000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [loadOrders]);
 
   const pendingOrders = useMemo(
     () =>
@@ -70,54 +136,65 @@ export default function SellerDashboard() {
     [orders]
   );
 
-  function getPaymentLabel(
-    method?: PaymentMethod
-  ) {
-    switch (method) {
-      case "CASH_ON_DELIVERY":
-        return "Contra entrega";
+  const partialOrders = useMemo(
+    () =>
+      orders.filter(
+        (order) => order.status === "PARTIALLY_SHIPPED"
+      ),
+    [orders]
+  );
 
-      case "NEQUI":
-        return "Nequi";
+  const shippedOrders = useMemo(
+    () =>
+      orders.filter(
+        (order) =>
+          order.status === "SHIPPED" ||
+          order.status === "DELIVERED"
+      ),
+    [orders]
+  );
 
-      case "PAYPAL":
-        return "PayPal";
+  const totalUnitsPending = useMemo(
+    () =>
+      pendingOrders.reduce(
+        (total, order) => total + getOrderUnits(order),
+        0
+      ),
+    [pendingOrders]
+  );
 
-      default:
-        return "No especificado";
-    }
-  }
-
-  function getStatusLabel(order: SellerOrder) {
-    if (
-      order.paymentMethod === "CASH_ON_DELIVERY" &&
-      order.status === "PENDING"
-    ) {
-      return "CONTRA ENTREGA";
-    }
-
-    if (order.status === "PENDING") {
-      return "PAGO PENDIENTE";
-    }
-
-    if (order.status === "PAID") {
-      return "PAGO CONFIRMADO";
-    }
-
-    return order.status;
-  }
+  const totalSales = useMemo(
+    () =>
+      orders.reduce(
+        (total, order) => total + order.total,
+        0
+      ),
+    [orders]
+  );
 
   async function handleShip(order: SellerOrder) {
     const paymentLabel = getPaymentLabel(
       order.paymentMethod
     );
 
+    const units = getOrderUnits(order);
+
     const result = await Swal.fire({
       icon: "question",
       title: "¿Marcar pedido como enviado?",
       html: `
-        <p class="mb-1">
+        <p class="mb-2">
           Pedido <strong>#${order.id}</strong>
+        </p>
+
+        <p class="mb-1">
+          Productos:
+          <strong>${order.items.length}</strong>
+        </p>
+
+        <p class="mb-1">
+          Unidades:
+          <strong>${units}</strong>
         </p>
 
         <p class="mb-1">
@@ -155,7 +232,7 @@ export default function SellerDashboard() {
         showConfirmButton: false,
       });
 
-      await loadOrders();
+      await loadOrders(false);
     } catch (error: any) {
       await Swal.fire({
         icon: "error",
@@ -171,6 +248,7 @@ export default function SellerDashboard() {
 
   return (
     <div>
+
       <div className="card hero-card mb-4">
         <div className="card-body p-4">
           <div className="beauty-eyebrow mb-2">
@@ -182,58 +260,162 @@ export default function SellerDashboard() {
           </h1>
 
           <p className="mb-0">
-            Administra tu catálogo, tu tienda y prepara tus
-            ventas para envío.
+            Administra tu catálogo, tus tiendas y prepara
+            las ventas para despacho.
           </p>
         </div>
       </div>
 
       <div className="row g-4 mb-5">
-        <div className="col-md-4">
+
+        <div className="col-6 col-xl-2">
           <div className="card stat-card h-100">
             <div className="card-body">
               <div className="text-muted">
-                Productos publicados
+                Productos
               </div>
 
-              <div className="display-5 fw-bold">
+              <div className="display-6 fw-bold">
                 {products}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-md-4">
+        <div className="col-6 col-xl-2">
           <div className="card stat-card h-100">
             <div className="card-body">
               <div className="text-muted">
-                Mis tiendas
+                Tiendas
               </div>
 
-              <div className="display-5 fw-bold">
+              <div className="display-6 fw-bold">
                 {stores}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="col-md-4">
+        <div className="col-6 col-xl-3">
           <div className="card stat-card h-100">
             <div className="card-body">
               <div className="text-muted">
-                Ventas pendientes de envío
+                Pendientes de envío
               </div>
 
-              <div className="display-5 fw-bold">
+              <div className="display-6 fw-bold">
                 {pendingOrders.length}
+              </div>
+
+              <small className="text-muted">
+                {totalUnitsPending} unidades
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-6 col-xl-2">
+          <div className="card stat-card h-100">
+            <div className="card-body">
+              <div className="text-muted">
+                Enviados
+              </div>
+
+              <div className="display-6 fw-bold">
+                {shippedOrders.length}
               </div>
             </div>
           </div>
         </div>
+
+        <div className="col-12 col-xl-3">
+          <div className="card stat-card h-100">
+            <div className="card-body">
+              <div className="text-muted">
+                Ventas registradas
+              </div>
+
+              <div className="fs-3 fw-bold">
+                ${totalSales.toLocaleString("es-CO")}
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
+      {partialOrders.length > 0 && (
+        <section className="mb-5">
+
+          <div className="d-flex justify-content-between align-items-end mb-3">
+            <div>
+              <div className="beauty-eyebrow mb-1">
+                Seguimiento
+              </div>
+
+              <h2 className="h4 fw-bold mb-1">
+                Pedidos con envío parcial
+              </h2>
+
+              <p className="text-muted mb-0">
+                Estos pedidos tienen productos enviados y otros
+                pendientes.
+              </p>
+            </div>
+          </div>
+
+          <div className="row g-4">
+            {partialOrders.map((order) => (
+              <div
+                className="col-12 col-xl-6"
+                key={order.id}
+              >
+                <div className="card border-0 shadow-sm h-100">
+                  <div className="card-body p-4">
+
+                    <div className="d-flex justify-content-between align-items-start mb-3">
+                      <div>
+                        <div className="beauty-eyebrow">
+                          Pedido
+                        </div>
+
+                        <h3 className="h5 fw-bold mb-1">
+                          #{order.id}
+                        </h3>
+                      </div>
+
+                      <span
+                        className={`badge ${getStatusClass(order.status)}`}
+                      >
+                        {getStatusLabel(order.status)}
+                      </span>
+                    </div>
+
+                    <div className="alert alert-info mb-0">
+                      <strong>
+                        {order.shippedItems ?? 0}
+                      </strong>{" "}
+                      de{" "}
+                      <strong>
+                        {order.totalItems ??
+                          getOrderUnits(order)}
+                      </strong>{" "}
+                      unidades enviadas.
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </section>
+      )}
+
       <section>
-        <div className="d-flex justify-content-between align-items-end mb-3">
+
+        <div className="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+
           <div>
             <div className="beauty-eyebrow mb-1">
               Gestión de pedidos
@@ -244,26 +426,28 @@ export default function SellerDashboard() {
             </h2>
 
             <p className="text-muted mb-0">
-              Revisa el estado del pago y prepara los pedidos
-              para despacho.
+              Revisa los pedidos y prepara cada compra para
+              despacho.
             </p>
           </div>
 
           <button
             type="button"
             className="btn beauty-btn"
-            onClick={loadOrders}
+            onClick={() => loadOrders()}
             disabled={loadingOrders}
           >
             {loadingOrders
               ? "Actualizando..."
               : "Actualizar"}
           </button>
+
         </div>
 
         {loadingOrders ? (
           <div className="card border-0 shadow-sm">
             <div className="card-body text-center py-5">
+
               <div
                 className="spinner-border"
                 role="status"
@@ -277,10 +461,12 @@ export default function SellerDashboard() {
               <div className="mt-3 text-muted">
                 Consultando ventas...
               </div>
+
             </div>
           </div>
         ) : pendingOrders.length === 0 ? (
           <div className="beauty-empty">
+
             <div className="fs-1 mb-2">
               ✦
             </div>
@@ -293,39 +479,78 @@ export default function SellerDashboard() {
               Cuando un cliente realice una compra, el pedido
               aparecerá aquí para preparación y despacho.
             </p>
+
           </div>
         ) : (
           <div className="row g-4">
-            {pendingOrders.map((order) => (
-              <div
-                className="col-12 col-xl-6"
-                key={order.id}
-              >
-                <div className="card product-card h-100">
-                  <div className="card-body p-4">
-                    <div className="d-flex justify-content-between align-items-start mb-3">
-                      <div>
-                        <div className="beauty-eyebrow">
-                          Venta
+
+            {pendingOrders.map((order) => {
+              const units = getOrderUnits(order);
+              const isShipping = shippingId === order.id;
+
+              return (
+                <div
+                  className="col-12 col-xl-6"
+                  key={order.id}
+                >
+                  <div className="card product-card h-100">
+
+                    <div className="card-body p-4">
+
+                      <div className="d-flex justify-content-between align-items-start mb-3">
+
+                        <div>
+                          <div className="beauty-eyebrow">
+                            Venta
+                          </div>
+
+                          <h3 className="h5 fw-bold mb-1">
+                            Pedido #{order.id}
+                          </h3>
+
+                          <small className="text-muted">
+                            {new Date(
+                              order.createdAt
+                            ).toLocaleString("es-CO")}
+                          </small>
                         </div>
 
-                        <h3 className="h5 fw-bold mb-1">
-                          Pedido #{order.id}
-                        </h3>
+                        <span
+                          className={`badge ${getStatusClass(order.status)}`}
+                        >
+                          {getStatusLabel(order.status)}
+                        </span>
 
-                        <small className="text-muted">
-                          {new Date(
-                            order.createdAt
-                          ).toLocaleString("es-CO")}
-                        </small>
                       </div>
 
-                      <span className="beauty-badge">
-                        {getStatusLabel(order)}
-                      </span>
-                    </div>
+                      <div className="row g-2 mb-3">
 
-                    <div className="mb-3">
+                        <div className="col-6">
+                          <div className="bg-light rounded p-3 h-100">
+                            <small className="text-muted d-block">
+                              Productos
+                            </small>
+
+                            <strong>
+                              {order.items.length}
+                            </strong>
+                          </div>
+                        </div>
+
+                        <div className="col-6">
+                          <div className="bg-light rounded p-3 h-100">
+                            <small className="text-muted d-block">
+                              Unidades
+                            </small>
+
+                            <strong>
+                              {units}
+                            </strong>
+                          </div>
+                        </div>
+
+                      </div>
+
                       <div className="d-flex justify-content-between align-items-center mb-3 p-3 rounded bg-light">
                         <span className="text-muted">
                           Método de pago
@@ -338,65 +563,74 @@ export default function SellerDashboard() {
                         </strong>
                       </div>
 
-                      {order.items.map((item) => (
-                        <div
-                          key={item.productId}
-                          className="d-flex justify-content-between align-items-center py-2 border-bottom"
-                        >
-                          <div>
-                            <div className="fw-semibold">
-                              {item.productName}
+                      <div className="mb-3">
+
+                        {order.items.map((item) => (
+                          <div
+                            key={item.productId}
+                            className="d-flex justify-content-between align-items-center py-2 border-bottom"
+                          >
+                            <div>
+                              <div className="fw-semibold">
+                                {item.productName}
+                              </div>
+
+                              <small className="text-muted">
+                                {item.quantity} × $
+                                {item.price.toLocaleString(
+                                  "es-CO"
+                                )}
+                              </small>
                             </div>
 
-                            <small className="text-muted">
-                              Cantidad: {item.quantity}
-                            </small>
+                            <div className="fw-semibold">
+                              $
+                              {item.subtotal.toLocaleString(
+                                "es-CO"
+                              )}
+                            </div>
                           </div>
+                        ))}
 
-                          <div className="fw-semibold">
-                            $
-                            {item.subtotal.toLocaleString(
-                              "es-CO"
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                      </div>
+
+                      <div className="d-flex justify-content-between align-items-center mb-3">
+
+                        <span className="text-muted">
+                          Total
+                        </span>
+
+                        <span className="product-price fs-4">
+                          $
+                          {order.total.toLocaleString(
+                            "es-CO"
+                          )}
+                        </span>
+
+                      </div>
+
+                      <button
+                        type="button"
+                        className="btn beauty-btn w-100"
+                        onClick={() => handleShip(order)}
+                        disabled={isShipping}
+                      >
+                        {isShipping
+                          ? "Actualizando..."
+                          : "Marcar como enviado"}
+                      </button>
+
                     </div>
-
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <span className="text-muted">
-                        Total
-                      </span>
-
-                      <span className="product-price fs-4">
-                        $
-                        {order.total.toLocaleString(
-                          "es-CO"
-                        )}
-                      </span>
-                    </div>
-
-                    <button
-                      type="button"
-                      className="btn beauty-btn w-100"
-                      onClick={() =>
-                        handleShip(order)
-                      }
-                      disabled={
-                        shippingId === order.id
-                      }
-                    >
-                      {shippingId === order.id
-                        ? "Actualizando..."
-                        : "Marcar como enviado"}
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
+
           </div>
         )}
+
       </section>
+
     </div>
   );
 }
