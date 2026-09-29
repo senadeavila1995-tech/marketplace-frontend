@@ -240,6 +240,148 @@ function LineChart({
   );
 }
 
+function UnitsChart({
+  data,
+}: {
+  data: { date: string; units: number }[];
+}) {
+  if (!data.length) {
+    return (
+      <div className="text-center text-muted py-5">
+        No hay unidades vendidas en este período.
+      </div>
+    );
+  }
+
+  const width = 760;
+  const height = 280;
+  const padding = 42;
+
+  const max = Math.max(
+    ...data.map((item) => item.units),
+    1
+  );
+
+  const points = data.map((item, index) => {
+    const x =
+      padding +
+      (index / Math.max(data.length - 1, 1)) *
+        (width - padding * 2);
+
+    const y =
+      height -
+      padding -
+      (item.units / max) *
+        (height - padding * 2);
+
+    return {
+      ...item,
+      x,
+      y,
+    };
+  });
+
+  const line = points
+    .map((point) => `${point.x},${point.y}`)
+    .join(" ");
+
+  const area = [
+    `${padding},${height - padding}`,
+    ...points.map((point) => `${point.x},${point.y}`),
+    `${width - padding},${height - padding}`,
+  ].join(" ");
+
+  return (
+    <div className="w-100" style={{ overflowX: "auto" }}>
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        width="100%"
+        height="280"
+        role="img"
+        aria-label="Unidades vendidas"
+      >
+        <line
+          x1={padding}
+          y1={height - padding}
+          x2={width - padding}
+          y2={height - padding}
+          stroke="#dee2e6"
+        />
+
+        <line
+          x1={padding}
+          y1={padding}
+          x2={padding}
+          y2={height - padding}
+          stroke="#dee2e6"
+        />
+
+        <polygon
+          points={area}
+          fill="rgba(25, 135, 84, 0.08)"
+        />
+
+        <polyline
+          points={line}
+          fill="none"
+          stroke="#198754"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        {points.map((point) => (
+          <g key={point.date}>
+            <circle
+              cx={point.x}
+              cy={point.y}
+              r="4"
+              fill="#198754"
+            >
+              <title>
+                {shortDate(point.date)}:{" "}
+                {point.units} unidades
+              </title>
+            </circle>
+          </g>
+        ))}
+
+        {points.map((point, index) => {
+          if (
+            index !== 0 &&
+            index !== points.length - 1 &&
+            index % Math.ceil(points.length / 6) !== 0
+          ) {
+            return null;
+          }
+
+          return (
+            <text
+              key={`units-label-${point.date}`}
+              x={point.x}
+              y={height - 15}
+              textAnchor="middle"
+              fontSize="11"
+              fill="#6c757d"
+            >
+              {shortDate(point.date)}
+            </text>
+          );
+        })}
+
+        <text
+          x={padding}
+          y={20}
+          fontSize="12"
+          fill="#6c757d"
+        >
+          {max} unidades
+        </text>
+      </svg>
+    </div>
+  );
+}
+
 function BarChart({
   data,
 }: {
@@ -969,6 +1111,27 @@ export default function StoresPage() {
 
                       <BarChart
                         data={analytics.topProducts}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-xl-5">
+                  <div className="card dashboard-card h-100">
+                    <div className="card-body">
+                      <div className="mb-4">
+                        <h2 className="h5 fw-bold mb-1">
+                          Unidades vendidas
+                        </h2>
+
+                        <p className="small text-muted mb-0">
+                          Cantidad de productos vendidos
+                          durante los últimos {period} días.
+                        </p>
+                      </div>
+
+                      <UnitsChart
+                        data={analytics.unitsByDay}
                       />
                     </div>
                   </div>

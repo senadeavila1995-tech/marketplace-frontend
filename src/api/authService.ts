@@ -3,6 +3,7 @@ import type {
   LoginRequest,
   LoginResponse,
   RegisterRequest,
+  GoogleLoginRequest,
 } from "../types/User";
 import { session } from "../services/session";
 
@@ -28,6 +29,19 @@ export async function register(
     `${API_URL}/register`,
     data
   );
+
+  return response.data;
+}
+
+export async function googleLogin(
+  data: GoogleLoginRequest
+): Promise<LoginResponse> {
+  const response = await axios.post<LoginResponse>(
+    `${API_URL}/google`,
+    data
+  );
+
+  session.setSession(response.data);
 
   return response.data;
 }

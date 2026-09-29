@@ -19,6 +19,13 @@ export interface RegisterRequest {
   email: string;
   password: string;
   role: "CUSTOMER" | "SELLER";
+  promotionsAuthorized: boolean;
+}
+
+export interface GoogleLoginRequest {
+  credential: string;
+  termsAccepted: boolean;
+  promotionsAuthorized: boolean;
 }
 
 export interface LoginResponse {

@@ -11,13 +11,14 @@ export default function Register() {
     email: "",
     password: "",
     role: "CUSTOMER" as "CUSTOMER" | "SELLER",
+    promotionsAuthorized: false,
   });
 
   const [loading, setLoading] = useState(false);
 
   function updateField(
     field: keyof typeof form,
-    value: string
+    value: string | boolean
   ) {
     setForm((current) => ({
       ...current,
@@ -37,6 +38,16 @@ export default function Register() {
       await Swal.fire({
         icon: "warning",
         title: "Campos incompletos",
+      });
+      return;
+    }
+
+    if (!form.promotionsAuthorized) {
+      await Swal.fire({
+        icon: "warning",
+        title: "Autorización requerida",
+        text:
+          "Debes aceptar el acuerdo de comunicaciones y promociones para crear la cuenta.",
       });
       return;
     }
@@ -81,9 +92,18 @@ export default function Register() {
             </p>
           </div>
 
+          <div className="d-flex align-items-center gap-2 mb-4">
+            <hr className="flex-grow-1" />
+            <span className="text-muted small">O</span>
+            <hr className="flex-grow-1" />
+          </div>
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label">Nombre</label>
+              <label className="form-label">
+                Nombre
+              </label>
+
               <input
                 className="form-control"
                 value={form.name}
@@ -94,7 +114,10 @@ export default function Register() {
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Correo electrónico</label>
+              <label className="form-label">
+                Correo electrónico
+              </label>
+
               <input
                 type="email"
                 className="form-control"
@@ -106,7 +129,10 @@ export default function Register() {
             </div>
 
             <div className="mb-3">
-              <label className="form-label">Contraseña</label>
+              <label className="form-label">
+                Contraseña
+              </label>
+
               <input
                 type="password"
                 className="form-control"
@@ -117,28 +143,65 @@ export default function Register() {
               />
             </div>
 
-            <div className="mb-4">
-              <label className="form-label">Tipo de cuenta</label>
+            <div className="mb-3">
+              <label className="form-label">
+                Tipo de cuenta
+              </label>
+
               <select
                 className="form-select"
                 value={form.role}
                 onChange={(e) =>
                   updateField(
                     "role",
-                    e.target.value as "CUSTOMER" | "SELLER"
+                    e.target.value as
+                      | "CUSTOMER"
+                      | "SELLER"
                   )
                 }
               >
-                <option value="CUSTOMER">Cliente</option>
-                <option value="SELLER">Vendedor</option>
+                <option value="CUSTOMER">
+                  Cliente
+                </option>
+
+                <option value="SELLER">
+                  Vendedor
+                </option>
               </select>
             </div>
 
+            <div className="form-check mb-4">
+              <input
+                id="promotionsAuthorized"
+                type="checkbox"
+                className="form-check-input"
+                checked={form.promotionsAuthorized}
+                onChange={(e) =>
+                  updateField(
+                    "promotionsAuthorized",
+                    e.target.checked
+                  )
+                }
+              />
+
+              <label
+                htmlFor="promotionsAuthorized"
+                className="form-check-label"
+              >
+                Acepto recibir comunicaciones,
+                promociones y ofertas de Marketplace
+                en mi correo electrónico.
+              </label>
+            </div>
+
             <button
+              type="submit"
               className="btn btn-primary w-100"
               disabled={loading}
             >
-              {loading ? "Creando cuenta..." : "Registrarse"}
+              {loading
+                ? "Creando cuenta..."
+                : "Registrarse"}
             </button>
           </form>
 
@@ -146,7 +209,10 @@ export default function Register() {
             <span className="text-muted">
               ¿Ya tienes cuenta?{" "}
             </span>
-            <Link to="/login">Iniciar sesión</Link>
+
+            <Link to="/login">
+              Iniciar sesión
+            </Link>
           </div>
         </div>
       </div>
